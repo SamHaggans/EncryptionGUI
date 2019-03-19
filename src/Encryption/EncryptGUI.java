@@ -8,7 +8,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 public class EncryptGUI extends javax.swing.JFrame {
     private static ArrayList<String> services = new ArrayList<String>();
     private static ArrayList<String> usernames = new ArrayList<String>();
@@ -197,7 +197,6 @@ public class EncryptGUI extends javax.swing.JFrame {
         }
         PlainPanel.setVisible(false);
         PlainShowPanel.setVisible(false);
-        jDialog1.setVisible(true);
         try {
         FileText.setText(decryptFile("goat.txt"));}
         catch (Exception error){
@@ -216,9 +215,6 @@ public class EncryptGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         MainPanel = new javax.swing.JPanel();
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        jDialog1 = new javax.swing.JDialog();
-        jLabel2 = new javax.swing.JLabel();
         ServiceFind = new javax.swing.JTextField();
         FindInput = new javax.swing.JButton();
         PlainShowPanel = new javax.swing.JPanel();
@@ -229,11 +225,6 @@ public class EncryptGUI extends javax.swing.JFrame {
         Decrypt = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         Encrypt = new javax.swing.JButton();
-        AddPanel = new javax.swing.JPanel();
-        ServiceAdd = new javax.swing.JTextField();
-        UsernameAdd = new javax.swing.JTextField();
-        EmailAdd = new javax.swing.JTextField();
-        PasswordAdd = new javax.swing.JTextField();
         AddInput = new javax.swing.JToggleButton();
 
         javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
@@ -245,25 +236,6 @@ public class EncryptGUI extends javax.swing.JFrame {
         MainPanelLayout.setVerticalGroup(
             MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        jLabel2.setText("YOU HAVE DONE SOMETHING");
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
-                .addContainerGap(58, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(156, 156, 156))
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jLabel2)
-                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -360,84 +332,32 @@ public class EncryptGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        ServiceAdd.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        ServiceAdd.setText("Service");
-        ServiceAdd.setSelectionStart(0);
-
-        UsernameAdd.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        UsernameAdd.setText("Username");
-        UsernameAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UsernameAddActionPerformed(evt);
-            }
-        });
-
-        EmailAdd.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        EmailAdd.setText("Email");
-
-        PasswordAdd.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        PasswordAdd.setText("Password");
-
         AddInput.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        AddInput.setText("Add Password");
+        AddInput.setText("Add A Password");
         AddInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddInputActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout AddPanelLayout = new javax.swing.GroupLayout(AddPanel);
-        AddPanel.setLayout(AddPanelLayout);
-        AddPanelLayout.setHorizontalGroup(
-            AddPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddPanelLayout.createSequentialGroup()
-                .addComponent(AddInput)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(AddPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(AddPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(EmailAdd)
-                    .addComponent(ServiceAdd)
-                    .addComponent(UsernameAdd, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(AddPanelLayout.createSequentialGroup()
-                        .addComponent(PasswordAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 8, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        AddPanelLayout.setVerticalGroup(
-            AddPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddPanelLayout.createSequentialGroup()
-                .addComponent(ServiceAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(UsernameAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(EmailAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(PasswordAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(AddInput)
-                .addGap(36, 36, 36))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(190, 190, 190)
-                        .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(FindInput))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(AddPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(101, 101, 101)
-                        .addComponent(PlainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82)
-                        .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(190, 190, 190)
+                .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(FindInput)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(AddInput)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
+                .addComponent(PlainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(112, 112, 112))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,18 +368,15 @@ public class EncryptGUI extends javax.swing.JFrame {
                     .addComponent(FindInput))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(AddInput))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(89, 89, 89)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(AddPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addComponent(PlainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61))))
+                        .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(PlainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(36, 36, 36))
         );
 
         pack();
@@ -488,30 +405,23 @@ public class EncryptGUI extends javax.swing.JFrame {
         String s = currentRelativePath.toAbsolutePath().toString();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void UsernameAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameAddActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UsernameAddActionPerformed
-
     private void AddInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddInputActionPerformed
-        this.FileText.append(System.lineSeparator() + ServiceAdd.getText() + "~/" + UsernameAdd.getText() + "~/" + EmailAdd.getText() + "~/" + PasswordAdd.getText());
-    try
-    {
-      JOptionPane.showInputDialog(
-        this.MainPanel, 
-        "Add information below to add a password into the records. It will be encrypted and safe.", 
-        "Add Password", 
-        -1, 
-        null, 
-        null, 
-        "Service");
-      String toWrite = this.FileText.getText();
-      encryptFile("goat.txt", toWrite);
-    }
-    catch (Exception IOException)
-    {
-      System.out.println("bad");
-      return;
-    }
+    try {
+        JTextField serviceEnter = new JTextField();
+        JTextField usernameEnter = new JTextField();
+        JTextField emailEnter = new JTextField();
+        JTextField passwordEnter = new JTextField();
+        Object[] description = {"Service:", serviceEnter, "Username:", usernameEnter, "Email:", emailEnter, "Password:", passwordEnter};
+        JOptionPane.showConfirmDialog(null, description, "Add a service", JOptionPane.OK_CANCEL_OPTION);
+        FileText.append(System.lineSeparator() + serviceEnter.getText() + "~/" + usernameEnter.getText() + "~/" + emailEnter.getText() + "~/" + passwordEnter.getText());
+        String toWrite = this.FileText.getText();
+        encryptFile("goat.txt", toWrite);
+        }
+        catch (Exception IOException)
+        {
+            System.out.println("bad");
+            return;
+        }
     try
     {
       this.FileText.setText(decryptFile("goat.txt"));
@@ -524,7 +434,7 @@ public class EncryptGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_ServiceFindActionPerformed
 
     private void FindInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FindInputActionPerformed
-        int index = services.indexOf(this.ServiceFind.getText());
+    int index = services.indexOf(ServiceFind.getText());
     try
     {
       JOptionPane.showMessageDialog(this.MainPanel, 
@@ -536,7 +446,7 @@ public class EncryptGUI extends javax.swing.JFrame {
     {
       JOptionPane.showMessageDialog(this.MainPanel, "There is no password for that service. Check your spelling or create a new password.", "Error", 0);
     }
-
+    ServiceFind.setText("Service");
     }//GEN-LAST:event_FindInputActionPerformed
 
     /**
@@ -601,24 +511,16 @@ public class EncryptGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton AddInput;
-    private javax.swing.JPanel AddPanel;
     private javax.swing.JButton Decrypt;
-    private javax.swing.JTextField EmailAdd;
     private javax.swing.JButton Encrypt;
     private javax.swing.JTextArea FileText;
     private javax.swing.JScrollPane FileTextPane;
     private javax.swing.JButton FindInput;
     private javax.swing.JPanel MainPanel;
-    private javax.swing.JTextField PasswordAdd;
     private javax.swing.JPanel PlainPanel;
     private javax.swing.JPanel PlainShowPanel;
-    private javax.swing.JTextField ServiceAdd;
     private javax.swing.JTextField ServiceFind;
-    private javax.swing.JTextField UsernameAdd;
     private javax.swing.JButton jButton3;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPopupMenu jPopupMenu1;
     // End of variables declaration//GEN-END:variables
 }
