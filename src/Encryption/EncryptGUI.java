@@ -9,6 +9,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 public class EncryptGUI extends javax.swing.JFrame {
     private static ArrayList<String> services = new ArrayList<String>();
     private static ArrayList<String> usernames = new ArrayList<String>();
@@ -218,14 +219,13 @@ public class EncryptGUI extends javax.swing.JFrame {
         ServiceFind = new javax.swing.JTextField();
         FindInput = new javax.swing.JButton();
         PlainShowPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        PlainPanel = new javax.swing.JPanel();
+        Encrypt = new javax.swing.JButton();
+        FileName = new javax.swing.JLabel();
         FileTextPane = new javax.swing.JScrollPane();
         FileText = new javax.swing.JTextArea();
-        PlainPanel = new javax.swing.JPanel();
-        Decrypt = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        Encrypt = new javax.swing.JButton();
         AddInput = new javax.swing.JToggleButton();
+        SelectFile = new javax.swing.JButton();
 
         javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
         MainPanel.setLayout(MainPanelLayout);
@@ -256,48 +256,16 @@ public class EncryptGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("File: goat.txt");
-
-        FileText.setColumns(20);
-        FileText.setRows(5);
-        FileTextPane.setViewportView(FileText);
-
         javax.swing.GroupLayout PlainShowPanelLayout = new javax.swing.GroupLayout(PlainShowPanel);
         PlainShowPanel.setLayout(PlainShowPanelLayout);
         PlainShowPanelLayout.setHorizontalGroup(
             PlainShowPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PlainShowPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PlainShowPanelLayout.createSequentialGroup()
-                .addContainerGap(102, Short.MAX_VALUE)
-                .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+            .addGap(0, 256, Short.MAX_VALUE)
         );
         PlainShowPanelLayout.setVerticalGroup(
             PlainShowPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PlainShowPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+            .addGap(0, 183, Short.MAX_VALUE)
         );
-
-        Decrypt.setText("View Contents");
-        Decrypt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DecryptActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Edit File");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         Encrypt.setText("Write Contents");
         Encrypt.addActionListener(new java.awt.event.ActionListener() {
@@ -306,30 +274,37 @@ public class EncryptGUI extends javax.swing.JFrame {
             }
         });
 
+        FileName.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        FileName.setText("File: goat.txt");
+
+        FileText.setColumns(20);
+        FileText.setRows(5);
+        FileTextPane.setViewportView(FileText);
+
         javax.swing.GroupLayout PlainPanelLayout = new javax.swing.GroupLayout(PlainPanel);
         PlainPanel.setLayout(PlainPanelLayout);
         PlainPanelLayout.setHorizontalGroup(
             PlainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PlainPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(32, 32, 32)
                 .addGroup(PlainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Decrypt)
+                    .addComponent(FileName)
                     .addGroup(PlainPanelLayout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Encrypt)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                        .addComponent(Encrypt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         PlainPanelLayout.setVerticalGroup(
             PlainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PlainPanelLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(Decrypt)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(20, 20, 20)
+                .addComponent(FileName)
+                .addGap(18, 18, 18)
                 .addGroup(PlainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(Encrypt))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Encrypt)
+                    .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         AddInput.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
@@ -337,6 +312,13 @@ public class EncryptGUI extends javax.swing.JFrame {
         AddInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddInputActionPerformed(evt);
+            }
+        });
+
+        SelectFile.setText("Select a Plaintext File");
+        SelectFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectFileActionPerformed(evt);
             }
         });
 
@@ -349,34 +331,44 @@ public class EncryptGUI extends javax.swing.JFrame {
                 .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(FindInput)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SelectFile)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(AddInput)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(PlainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(112, 112, 112))
+                .addGap(140, 140, 140))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(FindInput))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(AddInput))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(FindInput)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(42, 42, 42)
+                        .addComponent(SelectFile)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
-                        .addComponent(PlainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(36, 36, 36))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PlainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(65, 65, 65)
+                                .addComponent(AddInput))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(59, 59, 59)
+                                .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         pack();
@@ -384,6 +376,8 @@ public class EncryptGUI extends javax.swing.JFrame {
 
     private void EncryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EncryptActionPerformed
        try {
+        PlainPanel.setVisible(false);
+        PlainShowPanel.setVisible(false);
         String toWrite = FileText.getText();
         encryptFile("goat.txt",toWrite);
        }
@@ -391,19 +385,6 @@ public class EncryptGUI extends javax.swing.JFrame {
             return;
         }
     }//GEN-LAST:event_EncryptActionPerformed
-
-    private void DecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DecryptActionPerformed
-        try {
-        FileText.setText(decryptFile("goat.txt"));}
-        catch (Exception IOException){
-            return;
-        }
-    }//GEN-LAST:event_DecryptActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void AddInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddInputActionPerformed
     try {
@@ -437,17 +418,40 @@ public class EncryptGUI extends javax.swing.JFrame {
     int index = services.indexOf(ServiceFind.getText());
     try
     {
-      JOptionPane.showMessageDialog(this.MainPanel, 
+      JOptionPane.showMessageDialog(MainPanel, 
         "Username: " + usernames.get(index) + "\nEmail: " + emails.get(index) + "\nPassword: " + pws.get(index), 
         "INFORMATION FOR " + services.get(index), 
         -1);
     }
     catch (Exception err)
     {
-      JOptionPane.showMessageDialog(this.MainPanel, "There is no password for that service. Check your spelling or create a new password.", "Error", 0);
+      JOptionPane.showMessageDialog(MainPanel, "There is no password for that service. Check your spelling or create a new password.", "Error", 0);
     }
     ServiceFind.setText("Service");
     }//GEN-LAST:event_FindInputActionPerformed
+
+    private void SelectFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectFileActionPerformed
+        JFileChooser selectFile = new JFileChooser();
+        selectFile.showOpenDialog(MainPanel);
+        String openFile = selectFile.getSelectedFile().getName();
+        String fileExtension = openFile.substring(openFile.indexOf("."),openFile.length());
+        while (openFile.equals("goat.txt")||!fileExtension.equals(".txt")){
+            JOptionPane.showMessageDialog(MainPanel, "You must select a .txt file, and it cannot be the main passwords file (goat.txt)", "Error", 0);
+            selectFile = new JFileChooser();
+            selectFile.showOpenDialog(MainPanel);
+            openFile = selectFile.getSelectedFile().getName();
+            fileExtension = openFile.substring(openFile.indexOf(".")-1,openFile.length());
+        }
+        PlainPanel.setVisible(true);
+        PlainShowPanel.setVisible(true);
+        try {
+            FileText.setText(decryptFile(openFile));
+        }
+        catch (Exception IOException){
+            return;
+        }
+        
+    }//GEN-LAST:event_SelectFileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -511,16 +515,15 @@ public class EncryptGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton AddInput;
-    private javax.swing.JButton Decrypt;
     private javax.swing.JButton Encrypt;
+    private javax.swing.JLabel FileName;
     private javax.swing.JTextArea FileText;
     private javax.swing.JScrollPane FileTextPane;
     private javax.swing.JButton FindInput;
     private javax.swing.JPanel MainPanel;
     private javax.swing.JPanel PlainPanel;
     private javax.swing.JPanel PlainShowPanel;
+    private javax.swing.JButton SelectFile;
     private javax.swing.JTextField ServiceFind;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
