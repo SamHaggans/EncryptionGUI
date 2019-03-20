@@ -15,7 +15,8 @@ public class EncryptGUI extends javax.swing.JFrame {
     private static ArrayList<String> usernames = new ArrayList<String>();
     private static ArrayList<String> emails = new ArrayList<String>();
     private static ArrayList<String> pws = new ArrayList<String>();
-    private String password;
+    //private String password;
+    private String openFile;
     public static String[] encryptText(String toEncrypt) throws Exception{
         String encrypted = "";
         String key = shuffle("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*\'\"(){}[]:;<>,./?|-=_+`");
@@ -31,20 +32,49 @@ public class EncryptGUI extends javax.swing.JFrame {
         return returns;
     }
     
+    public static String encryptTextWithKey(String toEncrypt, String key) throws Exception{
+        String encrypted = "";
+        int countChar = 0;
+        for (int i = 0; i < toEncrypt.length();i++){
+            countChar+=1;
+            if (countChar>19){
+                //key = shift(key);
+            }
+            encrypted += encryptChar(toEncrypt.substring(i,i+1),key);
+        }
+        return encrypted;
+    }  
     private static String encryptChar(String chara,String key){
         String masterKey = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*\'\"(){}[]:;<>,./?|-=_+`";
         int charIndex = key.indexOf(chara);
         try{
         return masterKey.substring(charIndex,charIndex+1);}
-        catch (Exception StringIndexOutOfBoundsException) {
+        catch (Exception err) {
             return chara;
         }
     }
-    
     public static String[] decryptText(String[] info) throws Exception{
         String decrypted = "";
         String toDecrypt = info[0];
-        String key = info[1];
+        String password = "Password";
+        String key = decryptKey(info[1],password);
+        String origKey = key;
+        int countChar = 0;
+        for (int i = 0; i < toDecrypt.length();i++){
+            countChar+=1;
+            if (countChar>19){
+                //key = shift(key);
+            }
+            decrypted += decryptChar(toDecrypt.substring(i,i+1),key);
+        }
+        String[] returns = {decrypted,origKey};
+        return returns;
+    }
+    public static String[] decryptPassText(String[] info) throws Exception{
+        String decrypted = "";
+        String toDecrypt = info[0];
+        String password = "Password";
+        String key = decryptKey(info[1],password);
         String origKey = key;
         int countChar = 0;
         for (int i = 0; i < toDecrypt.length();i++){
@@ -69,7 +99,7 @@ public class EncryptGUI extends javax.swing.JFrame {
             emails.add(linesList.get(i).split("~/",10)[2]);
             pws.add(linesList.get(i).split("~/",10)[3]);
             }catch (Exception err){
-                System.out.print("");//Catch any empty lines that were read, which would mess up finding the ~/ separator character
+                //Catch any broken lines that were read, which would mess up finding the ~/ separator character
             }
         }
         String[] returns = {decrypted,origKey};
@@ -80,7 +110,7 @@ public class EncryptGUI extends javax.swing.JFrame {
         int charIndex = masterKey.indexOf(chara);
         try{
         return key.substring(charIndex,charIndex+1);}
-        catch (Exception StringIndexOutOfBoundsException) {
+        catch (Exception err) {
             return chara;
         }
     }
@@ -128,59 +158,73 @@ public class EncryptGUI extends javax.swing.JFrame {
     }
     
     public static String[] readFrom(String fileName) throws Exception{
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        BufferedReader reader = new BufferedReader(new FileReader(s+"/"+fileName));
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
         ArrayList<String> lines = new ArrayList<String>();
-        //System.out.println("Purging array");
-        //purgeArrayList(lines);
         String line = reader.readLine();
         while (line != null) {
             lines.add(line+System.lineSeparator());
             line = reader.readLine();
         }
         String stringResult = makeString(lines);
-        String[] returnArray = {stringResult, lines.get(lines.size()-1)};
+        String[] returnArray = {stringResult, lines.get(lines.size()-2),lines.get(lines.size()-1)};
         reader.close();
         return returnArray;
     }
     
     public static void encryptFile(String fileName, String toEncrypt) throws Exception {
-        Scanner userInput = new Scanner(System.in);
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        //System.out.println("Enter File to Encrypt: ");
-        //String fileName = userInput.nextLine();
+        String password = "Password";
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-        //System.out.println("Enter Text to Decrypt: ");
-        //String toDecrypt = userInput.nextLine();
-        //System.out.println("Enter Key for Decryption: ");
-        //String key = userInput.nextLine();
-        //System.out.println("Enter Text to Encrypt: ");
-        //String toEncrypt = userInput.nextLine();
-        String[] returnVals;
-        returnVals = encryptText(toEncrypt);
-        writer.write(returnVals[0] + "\n"+returnVals[1]);
+        String[] returnVals = encryptText(toEncrypt);
+        String keyWrite=encryptKey(returnVals[1],password);
+        String passWrite=encryptTextWithKey(password,returnVals[1]);
+        writer.write(returnVals[0] + "\n"+keyWrite+ "\n"+passWrite);
         writer.close();
     }
-    public static String decryptFile(String fileName) throws Exception, IOException {
-        //Scanner userInput = new Scanner(System.in);
-        Path currentRelativePath = Paths.get("");
-        //System.out.println("Enter File to Decrypt: ");
-        //String fileName = userInput.nextLine();
-        String s = currentRelativePath.toAbsolutePath().toString();
-        //System.out.println("Enter Text to Decrypt: ");
-        //String toDecrypt = userInput.nextLine();
-        String[] returnVals;
-        returnVals = decryptText(readFrom(fileName));
-        //BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-        //writer.write(returnVals[0]);
-        //writer.close();
+    public static String decryptFile(String fileName) throws Exception {
+        String[] returnVals = decryptText(readFrom(fileName));
+        return returnVals[0];
+    }
+    private static String encryptKey(String key, String pass){
+        String returnKey = "";
+        int selectVal = 0;
+        String password = pass;
+        String masterKey = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*\'\"(){}[]:;<>,./?|-=_+`";
+        while (password.length()<100){
+            password+=password;
+        }
+        for (int i =0;i<key.length();i++){
+            selectVal = masterKey.indexOf(password.substring(i,i+1))+masterKey.indexOf(key.substring(i,i+1));
+            if (selectVal>92){
+                selectVal = selectVal-93;
+            }
+            returnKey+=masterKey.substring(selectVal,selectVal+1);
+        }
+        return returnKey;
+    }
+    private static String decryptKey(String key, String pass){
+        String returnKey = "";
+        int selectVal = 0;
+        String password = pass;
+        String masterKey = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*\'\"(){}[]:;<>,./?|-=_+`";
+        while (password.length()<100){
+            password+=password;
+        }
+        for (int i =0;i<key.length();i++){
+            selectVal = masterKey.indexOf(key.substring(i,i+1))-masterKey.indexOf(password.substring(i,i+1));
+            if (selectVal<0){
+                selectVal = 93+selectVal;
+            }
+            returnKey+=masterKey.substring(selectVal,selectVal+1);
+        }
+        return returnKey;
+    }
+    public static String decryptPassFile(String fileName) throws Exception, IOException {
+        String[] returnVals = decryptPassText(readFrom(fileName));
         return returnVals[0];
     }
     private static String makeString(ArrayList array){
         String addString = "";
-        for (int i = 0; i < array.size()-1;i++){
+        for (int i = 0; i < array.size()-2;i++){
             addString += array.get(i);
         }
         return addString;
@@ -198,9 +242,11 @@ public class EncryptGUI extends javax.swing.JFrame {
         }
         PlainPanel.setVisible(false);
         PlainShowPanel.setVisible(false);
+        PassPane.setVisible(false);
         try {
-        FileText.setText(decryptFile("goat.txt"));}
-        catch (Exception error){
+            PassText.setText(decryptPassFile("goat.txt"));}
+        catch (Exception err){
+            System.out.println(err);
             return;
         }
         
@@ -216,16 +262,19 @@ public class EncryptGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         MainPanel = new javax.swing.JPanel();
-        ServiceFind = new javax.swing.JTextField();
-        FindInput = new javax.swing.JButton();
         PlainShowPanel = new javax.swing.JPanel();
         PlainPanel = new javax.swing.JPanel();
         Encrypt = new javax.swing.JButton();
         FileName = new javax.swing.JLabel();
         FileTextPane = new javax.swing.JScrollPane();
         FileText = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        FindInput = new javax.swing.JButton();
+        ServiceFind = new javax.swing.JTextField();
         AddInput = new javax.swing.JToggleButton();
         SelectFile = new javax.swing.JButton();
+        PassPane = new javax.swing.JScrollPane();
+        PassText = new javax.swing.JTextArea();
 
         javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
         MainPanel.setLayout(MainPanelLayout);
@@ -240,31 +289,15 @@ public class EncryptGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        ServiceFind.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        ServiceFind.setText("Service");
-        ServiceFind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ServiceFindActionPerformed(evt);
-            }
-        });
-
-        FindInput.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        FindInput.setText("Find Password");
-        FindInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FindInputActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout PlainShowPanelLayout = new javax.swing.GroupLayout(PlainShowPanel);
         PlainShowPanel.setLayout(PlainShowPanelLayout);
         PlainShowPanelLayout.setHorizontalGroup(
             PlainShowPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 256, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         PlainShowPanelLayout.setVerticalGroup(
             PlainShowPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 183, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         Encrypt.setText("Write Contents");
@@ -274,7 +307,7 @@ public class EncryptGUI extends javax.swing.JFrame {
             }
         });
 
-        FileName.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        FileName.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         FileName.setText("File: goat.txt");
 
         FileText.setColumns(20);
@@ -288,24 +321,40 @@ public class EncryptGUI extends javax.swing.JFrame {
             .addGroup(PlainPanelLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(PlainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(FileName)
-                    .addGroup(PlainPanelLayout.createSequentialGroup()
-                        .addComponent(Encrypt)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addComponent(Encrypt)
+                    .addComponent(FileName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         PlainPanelLayout.setVerticalGroup(
             PlainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PlainPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(FileName)
-                .addGap(18, 18, 18)
+                .addGap(49, 49, 49)
                 .addGroup(PlainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Encrypt)
-                    .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(FileTextPane, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(PlainPanelLayout.createSequentialGroup()
+                        .addComponent(FileName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Encrypt)))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
+
+        FindInput.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        FindInput.setText("Find Password");
+        FindInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FindInputActionPerformed(evt);
+            }
+        });
+
+        ServiceFind.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        ServiceFind.setText("Service");
+        ServiceFind.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ServiceFindActionPerformed(evt);
+            }
+        });
 
         AddInput.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         AddInput.setText("Add A Password");
@@ -322,53 +371,76 @@ public class EncryptGUI extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(AddInput)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(FindInput, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(SelectFile)
+                .addGap(60, 60, 60)
+                .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FindInput)
+                    .addComponent(AddInput))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SelectFile))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        PassText.setColumns(20);
+        PassText.setRows(5);
+        PassPane.setViewportView(PassText);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(190, 190, 190)
-                .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(FindInput)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SelectFile)
+                .addGap(35, 35, 35)
+                .addComponent(PlainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(AddInput)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(PlainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(140, 140, 140))
+                .addComponent(PassPane, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ServiceFind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(FindInput)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(SelectFile)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PlainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(65, 65, 65)
-                                .addComponent(AddInput))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(59, 59, 59)
-                                .addComponent(PlainShowPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(98, 98, 98)
+                        .addComponent(PassPane, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(9, 9, 9)
+                .addComponent(PlainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -376,12 +448,14 @@ public class EncryptGUI extends javax.swing.JFrame {
 
     private void EncryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EncryptActionPerformed
        try {
+        
         PlainPanel.setVisible(false);
         PlainShowPanel.setVisible(false);
         String toWrite = FileText.getText();
-        encryptFile("goat.txt",toWrite);
+        encryptFile(openFile,toWrite);
        }
-        catch (Exception IOException){
+        catch (Exception err){
+            System.out.println("BAD"+err);
             return;
         }
     }//GEN-LAST:event_EncryptActionPerformed
@@ -392,22 +466,22 @@ public class EncryptGUI extends javax.swing.JFrame {
         JTextField usernameEnter = new JTextField();
         JTextField emailEnter = new JTextField();
         JTextField passwordEnter = new JTextField();
-        Object[] description = {"Service:", serviceEnter, "Username:", usernameEnter, "Email:", emailEnter, "Password:", passwordEnter};
+        Object[] description = {"Input what you wish to add as a password below. Note that you MUST put in a value for all four boxes. If you do not have a value for that, just type anything like N/A.","Service:", serviceEnter, "Username:", usernameEnter, "Email:", emailEnter, "Password:", passwordEnter};
         JOptionPane.showConfirmDialog(null, description, "Add a service", JOptionPane.OK_CANCEL_OPTION);
-        FileText.append(System.lineSeparator() + serviceEnter.getText() + "~/" + usernameEnter.getText() + "~/" + emailEnter.getText() + "~/" + passwordEnter.getText());
-        String toWrite = this.FileText.getText();
+        PassText.append(System.lineSeparator() + serviceEnter.getText() + "~/" + usernameEnter.getText() + "~/" + emailEnter.getText() + "~/" + passwordEnter.getText());
+        String toWrite = PassText.getText();
         encryptFile("goat.txt", toWrite);
         }
-        catch (Exception IOException)
+        catch (Exception err)
         {
-            System.out.println("bad");
+            System.out.println(err);
             return;
         }
     try
     {
-      this.FileText.setText(decryptFile("goat.txt"));
+      PassText.setText(decryptPassFile("goat.txt"));
     }
-    catch (Exception IOException) {}
+    catch (Exception err) {System.out.println(err);}
     }//GEN-LAST:event_AddInputActionPerformed
 
     private void ServiceFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ServiceFindActionPerformed
@@ -431,26 +505,34 @@ public class EncryptGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_FindInputActionPerformed
 
     private void SelectFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectFileActionPerformed
-        JFileChooser selectFile = new JFileChooser();
-        selectFile.showOpenDialog(MainPanel);
-        String openFile = selectFile.getSelectedFile().getName();
-        String fileExtension = openFile.substring(openFile.indexOf("."),openFile.length());
-        while (openFile.equals("goat.txt")||!fileExtension.equals(".txt")){
-            JOptionPane.showMessageDialog(MainPanel, "You must select a .txt file, and it cannot be the main passwords file (goat.txt)", "Error", 0);
-            selectFile = new JFileChooser();
-            selectFile.showOpenDialog(MainPanel);
-            openFile = selectFile.getSelectedFile().getName();
-            fileExtension = openFile.substring(openFile.indexOf(".")-1,openFile.length());
-        }
-        PlainPanel.setVisible(true);
-        PlainShowPanel.setVisible(true);
         try {
-            FileText.setText(decryptFile(openFile));
+            JFileChooser selectFile = new JFileChooser();
+            selectFile.showOpenDialog(MainPanel);
+            String openFiley = selectFile.getSelectedFile().getAbsolutePath();
+            String fileExtension = openFiley.substring(openFiley.indexOf("."),openFiley.length());
+            while (openFiley.equals("goat.txt")||!fileExtension.equals(".txt")){
+                JOptionPane.showMessageDialog(MainPanel, "You must select a .txt file, and it cannot be the main passwords file (goat.txt)", "Error", 0);
+                selectFile = new JFileChooser();
+                selectFile.showOpenDialog(MainPanel);
+                openFiley = selectFile.getSelectedFile().getAbsolutePath();
+                fileExtension = openFiley.substring(openFiley.indexOf(".")-1,openFiley.length());
+            }
+            openFile = openFiley;
+            PlainPanel.setVisible(true);
+            PlainShowPanel.setVisible(true);
+            FileName.setText("File: " + openFile);
+            //selectFile.getSelectedFile().close();
+            try {
+                String goat = decryptFile(openFiley);
+                FileText.setText(goat);
+            }
+            catch (Exception err){
+                System.out.println("WORSE"+err);
+                return;
+            }
+        }catch (Exception err){
+            System.out.println("WORSER"+err);//Likely exited from the selection window with nullpointerexception, not an issue
         }
-        catch (Exception IOException){
-            return;
-        }
-        
     }//GEN-LAST:event_SelectFileActionPerformed
 
     /**
@@ -521,9 +603,12 @@ public class EncryptGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane FileTextPane;
     private javax.swing.JButton FindInput;
     private javax.swing.JPanel MainPanel;
+    private javax.swing.JScrollPane PassPane;
+    private javax.swing.JTextArea PassText;
     private javax.swing.JPanel PlainPanel;
     private javax.swing.JPanel PlainShowPanel;
     private javax.swing.JButton SelectFile;
     private javax.swing.JTextField ServiceFind;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
