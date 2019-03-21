@@ -15,8 +15,8 @@ public class EncryptGUI extends javax.swing.JFrame {
     private static ArrayList<String> usernames = new ArrayList<String>();
     private static ArrayList<String> emails = new ArrayList<String>();
     private static ArrayList<String> pws = new ArrayList<String>();
-    //private String password;
-    private String openFile;
+    private static String password;
+    private static String openFile;
     public static String[] encryptText(String toEncrypt) throws Exception{
         String encrypted = "";
         String key = shuffle("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*\'\"(){}[]:;<>,./?|-=_+`");
@@ -56,13 +56,12 @@ public class EncryptGUI extends javax.swing.JFrame {
     public static String[] decryptText(String[] info) throws Exception{
         String decrypted = "";
         String toDecrypt = info[0];
-        String password = "Password";
         String key = decryptKey(info[1],password);
         String origKey = key;
         int countChar = 0;
         for (int i = 0; i < toDecrypt.length();i++){
             countChar+=1;
-            if (countChar>19){
+            if (countChar>100){
                 //key = shift(key);
             }
             decrypted += decryptChar(toDecrypt.substring(i,i+1),key);
@@ -70,16 +69,28 @@ public class EncryptGUI extends javax.swing.JFrame {
         String[] returns = {decrypted,origKey};
         return returns;
     }
+    public static String decryptTextWithKey(String toDecrypt, String key) throws Exception{
+        String decrypted = "";
+        int countChar = 0;
+        for (int i = 0; i < toDecrypt.length();i++){
+            countChar+=1;
+            if (countChar>100){
+                //key = shift(key);
+            }
+            decrypted += decryptChar(toDecrypt.substring(i,i+1),key);
+        }
+        return decrypted;
+    }
     public static String[] decryptPassText(String[] info) throws Exception{
         String decrypted = "";
         String toDecrypt = info[0];
-        String password = "Password";
+        
         String key = decryptKey(info[1],password);
         String origKey = key;
         int countChar = 0;
         for (int i = 0; i < toDecrypt.length();i++){
             countChar+=1;
-            if (countChar>19){
+            if (countChar>100){
                 //key = shift(key);
             }
             decrypted += decryptChar(toDecrypt.substring(i,i+1),key);
@@ -141,18 +152,19 @@ public class EncryptGUI extends javax.swing.JFrame {
         }
         reader.close();
         int keyVal;
-        keyVal = masterKey.indexOf("Q");
+        keyVal = keyStart.indexOf("Q");
         String shiftKey = lines.get(keyVal);
+        System.out.println(shiftKey);
         int shiftVal;
         int newVal;
-        for (int i = 0; i< keyStart.length();i++){
+        for (int i = 0; i< keyStart.length()-1;i++){
             keyVal = masterKey.indexOf(keyStart.substring(i,i+1));
             shiftVal = masterKey.indexOf(shiftKey.substring(i,i+1));
             newVal = keyVal+shiftVal;
             if (newVal >92){
                 newVal -=93;
             }
-            returnKey+=masterKey.substring(newVal,newVal+1);
+            returnKey+=checkDuplicate(masterKey.substring(newVal,newVal+1),returnKey);
         }
         return returnKey;
     }
@@ -172,7 +184,7 @@ public class EncryptGUI extends javax.swing.JFrame {
     }
     
     public static void encryptFile(String fileName, String toEncrypt) throws Exception {
-        String password = "Password";
+        
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
         String[] returnVals = encryptText(toEncrypt);
         String keyWrite=encryptKey(returnVals[1],password);
@@ -214,6 +226,7 @@ public class EncryptGUI extends javax.swing.JFrame {
             if (selectVal<0){
                 selectVal = 93+selectVal;
             }
+            
             returnKey+=masterKey.substring(selectVal,selectVal+1);
         }
         return returnKey;
@@ -229,7 +242,13 @@ public class EncryptGUI extends javax.swing.JFrame {
         }
         return addString;
     }
-    
+    private static boolean checkPassword(String passwordy) throws Exception{
+        String[] read = readFrom("goat.txt");
+        String keyTry = decryptKey(read[1],passwordy);
+        String passTry = decryptTextWithKey(read[2],keyTry);
+        passTry = passTry.split("\n")[0];
+        return (passTry.equals(passwordy));
+    }
     public EncryptGUI() {
         initComponents();
         Path currentRelativePath = Paths.get("");
@@ -240,15 +259,43 @@ public class EncryptGUI extends javax.swing.JFrame {
                 generateS();
             }catch (Exception error){}
         }
+        File passFile = new File("goat.txt");
+        if (!passFile.exists()){
+            try {
+                passFile.createNewFile();
+                JTextField createPass = new JTextField();
+                Object[] description = {"You are running this program for the first time.\nPlease input a password below to use for the program\n. This will be used for all file decryptions and to enter the program\n","Password:", createPass};
+                JOptionPane.showConfirmDialog(null, description, "Set up the program", JOptionPane.OK_CANCEL_OPTION);
+                password = createPass.getText();
+            }catch (Exception err){}
+        }
+        else {
+            try {
+                boolean rightPassword = false;
+                String passThing = "";
+                JTextField createPass = new JTextField();
+                Object[] description = {"Please input password to access program","Password:", createPass};
+                JOptionPane.showConfirmDialog(null, description, "Sign in", JOptionPane.OK_CANCEL_OPTION);
+                rightPassword = checkPassword(createPass.getText());
+                passThing = createPass.getText();
+                while (!rightPassword){
+                    createPass = new JTextField();
+                    Object[] newDescription = {"Incorrect Password","Password:", createPass};
+                    JOptionPane.showConfirmDialog(null, newDescription, "Sign in", JOptionPane.OK_CANCEL_OPTION);
+                    rightPassword = checkPassword(createPass.getText());
+                    passThing = createPass.getText();
+                }
+                password = passThing;
+                PassText.setText(decryptPassFile("goat.txt"));
+            }
+            catch (Exception err){
+                System.out.println(err);
+            }   
+        }
         PlainPanel.setVisible(false);
         PlainShowPanel.setVisible(false);
         PassPane.setVisible(false);
-        try {
-            PassText.setText(decryptPassFile("goat.txt"));}
-        catch (Exception err){
-            System.out.println(err);
-            return;
-        }
+        
         
     }
 
@@ -593,6 +640,19 @@ public class EncryptGUI extends javax.swing.JFrame {
                     writer.append("\n");}
                 writer.close();
         }
+    }
+    public static String checkDuplicate(String object, String inside){
+        String masterKey = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*\'\"(){}[]:;<>,./?|-=_+`";
+        int indexVal = masterKey.indexOf(object);
+        while (inside.contains(object)){
+            
+            
+            if (indexVal < 92){indexVal++;}
+            else {indexVal = 0;}
+            object = masterKey.substring(indexVal,indexVal+1);
+            
+        }
+        return object;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
