@@ -1,3 +1,6 @@
 *
 !.gitignore
-!*/src/Encryption/EncryptGUI.java
+!src/Encryption/EncryptionGUI.java
+!LICENSE
+!README.md
+!EncryptionGUI.jar
