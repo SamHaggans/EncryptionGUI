@@ -1,6 +1,8 @@
 # EncryptionGUI
 A Java Encryption program GUI, created by Sam Haggans as an Computer Science IA project.
+
 If you find any bugs, please let me know.
+
 Development is mostly finished, but I am still making some improvements to this project.
 
 # How to Use
