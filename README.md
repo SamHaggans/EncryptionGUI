@@ -4,7 +4,7 @@ A Java Encryption program GUI, created by Sam Haggans as an Computer Science IA 
 If you find any bugs, please let me know.
 
 Development is mostly finished, but I am still making some improvements to this project.
-`test`
+
 # How to Use
 The EncryptionGUI.jar file can be used to run this program as an executable. However,
 to run it, you will need to download the Java Development Kit, available here: 
